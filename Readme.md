@@ -1,7 +1,3 @@
-```typescriptreact project="data-pipeline-admin"
-...
-```
-
 # A comprehensive Next.js admin portal for data pipeline monitoring with OpenMetadata integration. This will include a scan trigger, health monitoring and real-time status updates.
 
 ## Core Features
