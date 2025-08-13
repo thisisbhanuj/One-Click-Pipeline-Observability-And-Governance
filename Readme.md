@@ -1,4 +1,4 @@
-# A comprehensive Next.js admin portal for data pipeline monitoring with OpenMetadata integration. This will include a scan trigger, health monitoring and real-time status updates.
+# Next-Gen Data Pipeline Admin Portal with DBT, OpenMetadata & Snowflake Cortex Agent/Search: Empowering Real-Time, NLQ-Driven Insights for Business Leaders
 
 ## Core Features
 
