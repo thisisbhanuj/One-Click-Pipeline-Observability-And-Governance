@@ -20,6 +20,7 @@ yarn.lock
 # misc
 .DS_Store
 *.pem
+*.log
 
 # debug
 npm-debug.log*
@@ -41,3 +42,6 @@ next-env.d.ts
 
 # vscode
 .vscode
+
+#keys
+lib/keys/*

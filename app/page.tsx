@@ -7,9 +7,9 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Play, CheckCircle, XCircle, Clock, Database, GitBranch, RefreshCw, Activity } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
+import CotexAgentChatBot from './snowflake/cortex/agent/page'
 
 interface PipelineStatus {
   id: string
@@ -52,9 +52,9 @@ export default function AdminPortal() {
   const fetchDashboardData = async () => {
     try {
       const [pipelinesRes, freshnessRes, lineageRes] = await Promise.all([
-        fetch('/api/pipelines'),
-        fetch('/api/data-freshness'),
-        fetch('/api/lineage-changes')
+        fetch('/api/openmetadata/pipelines'),
+        fetch('/api/openmetadata/data-freshness'),
+        fetch('/api/openmetadata/lineage-changes')
       ])
 
       const pipelinesData = await pipelinesRes.json()
@@ -219,17 +219,18 @@ export default function AdminPortal() {
         {/* Main Content Tabs */}
         <Tabs defaultValue="pipelines" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="pipelines">Pipeline Status</TabsTrigger>
-            <TabsTrigger value="freshness">Data Freshness</TabsTrigger>
-            <TabsTrigger value="lineage">Lineage Changes</TabsTrigger>
+            <TabsTrigger value="pipelines">{process.env.NEXT_PUBLIC_TAB_PIPELINE_HEALTH_NAME}</TabsTrigger>
+            <TabsTrigger value="freshness">{process.env.NEXT_PUBLIC_TAB_FRESHNESS_NAME}</TabsTrigger>
+            <TabsTrigger value="lineage">{process.env.NEXT_PUBLIC_TAB_LINEAGE_NAME}</TabsTrigger>
+            <TabsTrigger value="cortex-agent">{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_NAME}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pipelines" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Pipeline Health Monitoring</CardTitle>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_PIPELINE_HEALTH}</CardTitle>
                 <CardDescription>
-                  Real-time status of your data ingestion pipelines and Great Expectations test results
+                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_PIPELINE_HEALTH_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -286,9 +287,9 @@ export default function AdminPortal() {
           <TabsContent value="freshness" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Data Freshness Monitoring</CardTitle>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_FRESHNESS}</CardTitle>
                 <CardDescription>
-                  Track data freshness across your tables using OpenMetadata profiler metrics
+                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_FRESHNESS_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -332,31 +333,35 @@ export default function AdminPortal() {
           <TabsContent value="lineage" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Lineage Changes</CardTitle>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_LINEAGE_TITLE}</CardTitle>
                 <CardDescription>
-                  Recent changes to your data lineage DAGs tracked via git diff
+                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_LINEAGE_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {lineageChanges.map((change) => (
-                    <Alert key={change.id}>
-                      <GitBranch className="h-4 w-4" />
-                      <AlertDescription>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Badge className={getChangeTypeColor(change.type)}>
-                              {change.type}
-                            </Badge>
-                            <span className="font-medium">{change.entity}</span>
-                            <span className="text-sm text-gray-500">by {change.author}</span>
-                          </div>
-                          <span className="text-sm text-gray-500">{change.timestamp}</span>
-                        </div>
-                      </AlertDescription>
-                    </Alert>
-                  ))}
+                  {<iframe
+                      title='OpenMetaData'
+                      src={process.env.NEXT_PUBLIC_OPENMETADATA_BASE_URI}
+                      width="100%"
+                      height="800"
+                      style={{ border: 'none' }}
+                  />}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="cortex-agent" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_TITLE}</CardTitle>
+                <CardDescription>
+                  {process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_DESCRIPTION}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CotexAgentChatBot />
               </CardContent>
             </Card>
           </TabsContent>
