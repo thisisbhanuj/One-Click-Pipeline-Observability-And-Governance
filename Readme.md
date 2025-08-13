@@ -2,6 +2,8 @@
 
 ## Core Features
 
+<img width="1916" height="894" alt="image" src="https://github.com/user-attachments/assets/b3d25c10-441e-41a7-bb3e-e35500d016e4" />
+
 **One-Click Experience:**
 
 - **Scan Now Button**: Triggers OpenMetadata REST API or MWAA DAG ingestion
