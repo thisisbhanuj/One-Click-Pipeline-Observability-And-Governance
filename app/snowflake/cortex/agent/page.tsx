@@ -55,25 +55,37 @@ export default function CortexAgentChatBot() {
   };
 
   return (
-    <main>
-      <h1>Cortex Chat</h1>
-      <textarea
-        rows={4}
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Ask something..."
-      />
-      <button onClick={sendPrompt} disabled={loading || !prompt}>
-        {loading ? "Loading..." : "Send"}
-      </button>
+    <main className="space-y-4">
+      <div>
+        <textarea
+          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          rows={4}
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Show me the top selling brands in by total sales quantity in the state ‘TX' in the ‘Books' category in the year 2003"
+        />
+        <button
+          className={`w-40 p-2 border rounded-lg focus:outline-none 
+            ${loading || !prompt
+              ? "bg-gray-600 text-gray-200 border-gray-300 cursor-not-allowed"
+              : "bg-black text-white border-gray-300 hover:bg-gray-800"}`}
+          onClick={sendPrompt}
+          disabled={loading || !prompt}
+        >
+          {loading ? "❄️ Snowflake Cortex Agent is working..." : "Send"}
+        </button>
+      </div>
 
       {response?.error && <pre>{response.error}</pre>}
 
-      {response?.sql && response?.table?.length > 0 && (
+      <div className="overflow-x-auto border border-gray-200 rounded-lg">
+        {response?.sql && response?.table?.length > 0 && (
         <>
           <h2>Table Result:</h2>
-          <table border={1} style={{ marginTop: 20 }}>
-            <thead>
+          <table 
+            className="min-w-full border-collapse"
+            border={1} style={{ marginTop: 20 }}>
+            <thead className="bg-gray-100">
               <tr>
                 {Object.keys(response.table[0]).map((col) => (
                   <th key={col}>{col}</th>
@@ -98,7 +110,8 @@ export default function CortexAgentChatBot() {
             </div>
           )}
         </>
-      )}
+        )}
+      </div>
 
       {response?.text && <pre>{response.text}</pre>}
       {response?.citations && (

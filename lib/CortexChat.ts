@@ -74,8 +74,6 @@ export class CortexChat {
       Accept: "application/json",
     };
 
-    console.log(headers)
-
     return axios.post(this.agentUrl, payload, { headers });
   }
 
