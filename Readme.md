@@ -13,7 +13,8 @@
 1. **Test Pass/Fail Status**: Great Expectations results with visual indicators
 2. **Data Freshness**: OpenMetadata profiler metrics with freshness scores
 3. **Last Ingest Timestamp**: Real-time pipeline execution tracking
-4. **Lineage Changes**: Git diff tracking for DAG modifications
+4. **Lineage Changes**: Git Data Lineage tracking for DAG modifications
+5. **❄️ Snowflake Cortex Agent - BI**: Cortex Agents simplify AI-powered data interactions via a REST API, combining hybrid search and accurate SQL generation. They streamline workflows by managing context retrieval, natural language to SQL conversion, and LLM orchestration. Response quality is enhanced with in-line citations, answer abstention, and multi-message context handling. Developers benefit from a single API call integration, real-time streamed responses, and reduced latency for optimized applications.
 
 ## UI Components
 
