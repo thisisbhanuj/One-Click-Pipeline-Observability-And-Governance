@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Play, CheckCircle, XCircle, Clock, Database, GitBranch, RefreshCw, Activity } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
 import CotexAgentChatBot from './snowflake/cortex/agent/page'
+import { CONSTANTS } from '@/lib/constants'
 
 interface PipelineStatus {
   id: string
@@ -136,12 +137,14 @@ export default function AdminPortal() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Data Pipeline Admin Portal</h1>
-            <p className="text-gray-600 mt-1">Monitor and manage your data ingestion pipelines</p>
+            <h1 className="text-3xl font-bold text-gray-900">{CONSTANTS.APP_TITLE}</h1>
+            <p className="text-gray-600 mt-1">
+              {CONSTANTS.APP_DESCRIPTION}
+            </p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-500">
-              Last updated: {lastScanTime}
+              {CONSTANTS.LAST_UPDATED} {lastScanTime}
             </div>
             <Button 
               onClick={handleScanNow} 
@@ -151,12 +154,12 @@ export default function AdminPortal() {
               {isScanning ? (
                 <>
                   <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                  Scanning...
+                  {CONSTANTS.SCANNING}
                 </>
               ) : (
                 <>
                   <Play className="mr-2 h-4 w-4" />
-                  Scan Now
+                  {CONSTANTS.SCAN_NOW}
                 </>
               )}
             </Button>
@@ -167,7 +170,7 @@ export default function AdminPortal() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Overall Health</CardTitle>
+              <CardTitle className="text-sm font-medium">{CONSTANTS.OVERALL_HEALTH}</CardTitle>
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -178,7 +181,7 @@ export default function AdminPortal() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Pipelines</CardTitle>
+              <CardTitle className="text-sm font-medium">{CONSTANTS.ACTIVE_PIPELINES}</CardTitle>
               <Database className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -191,7 +194,7 @@ export default function AdminPortal() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Fresh Tables</CardTitle>
+              <CardTitle className="text-sm font-medium">{CONSTANTS.FRESH_TABLES}</CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -204,26 +207,62 @@ export default function AdminPortal() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Recent Changes</CardTitle>
+              <CardTitle className="text-sm font-medium">{CONSTANTS.RECENT_CHANGES}</CardTitle>
               <GitBranch className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{lineageChanges.length}</div>
               <p className="text-xs text-muted-foreground">
-                in last 24h
+                {CONSTANTS.LAST24_HRS}
               </p>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="pipelines" className="space-y-4">
+        <Tabs defaultValue="cortex-agent" className="space-y-4">
           <TabsList>
+            <TabsTrigger value="cortex-agent">{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_NAME}</TabsTrigger>
+            <TabsTrigger value="lineage">{process.env.NEXT_PUBLIC_TAB_LINEAGE_NAME}</TabsTrigger>
             <TabsTrigger value="pipelines">{process.env.NEXT_PUBLIC_TAB_PIPELINE_HEALTH_NAME}</TabsTrigger>
             <TabsTrigger value="freshness">{process.env.NEXT_PUBLIC_TAB_FRESHNESS_NAME}</TabsTrigger>
-            <TabsTrigger value="lineage">{process.env.NEXT_PUBLIC_TAB_LINEAGE_NAME}</TabsTrigger>
-            <TabsTrigger value="cortex-agent">{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_NAME}</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="cortex-agent" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_TITLE}</CardTitle>
+                <CardDescription>
+                  {process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_DESCRIPTION}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CotexAgentChatBot />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="lineage" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_SOLUTION_TITLE}</CardTitle>
+                <CardDescription>
+                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_SOLUTION_DESCRIPTION}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {<iframe
+                      title='OpenMetaData'
+                      src={process.env.NEXT_PUBLIC_OPENMETADATA_BASE_URI}
+                      width="100%"
+                      height="800"
+                      style={{ border: 'none' }}
+                  />}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="pipelines" className="space-y-4">
             <Card>
@@ -296,10 +335,10 @@ export default function AdminPortal() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Table</TableHead>
-                      <TableHead>Last Updated</TableHead>
-                      <TableHead>Freshness Score</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{CONSTANTS.FRESHNESS_HEADERS.TABLE}</TableHead>
+                      <TableHead>{CONSTANTS.FRESHNESS_HEADERS.LAST_UPDATED}</TableHead>
+                      <TableHead>{CONSTANTS.FRESHNESS_HEADERS.FRESHNESS_SCORE}</TableHead>
+                      <TableHead>{CONSTANTS.FRESHNESS_HEADERS.STATUS}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -326,42 +365,6 @@ export default function AdminPortal() {
                     ))}
                   </TableBody>
                 </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="lineage" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_LINEAGE_TITLE}</CardTitle>
-                <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_LINEAGE_DESCRIPTION}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {<iframe
-                      title='OpenMetaData'
-                      src={process.env.NEXT_PUBLIC_OPENMETADATA_BASE_URI}
-                      width="100%"
-                      height="800"
-                      style={{ border: 'none' }}
-                  />}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="cortex-agent" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_TITLE}</CardTitle>
-                <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_DESCRIPTION}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <CotexAgentChatBot />
               </CardContent>
             </Card>
           </TabsContent>

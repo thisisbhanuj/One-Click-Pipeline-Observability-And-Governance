@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { PROMPTS, CONSTANTS } from "@/lib/constants";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -62,7 +63,7 @@ export default function CortexAgentChatBot() {
           rows={4}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Show me the top selling brands in by total sales quantity in the state ‘TX' in the ‘Books' category in the year 2003"
+          placeholder={PROMPTS.TOP_SELLING_BOOK_BRANDS_TX_2003.description}
         />
         <button
           className={`w-40 p-2 border rounded-lg focus:outline-none 
@@ -78,10 +79,12 @@ export default function CortexAgentChatBot() {
 
       {response?.error && <pre>{response.error}</pre>}
 
-      <div className="overflow-x-auto border border-gray-200 rounded-lg">
+      <div className="bg-white p-4 rounded-xl shadow-sm space-y-6">
         {response?.sql && response?.table?.length > 0 && (
         <>
-          <h2>Table Result:</h2>
+          <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+            {CONSTANTS.TABLE_RESULT}
+          </h2>
           <table 
             className="min-w-full border-collapse"
             border={1} style={{ marginTop: 20 }}>
@@ -104,9 +107,12 @@ export default function CortexAgentChatBot() {
           </table>
 
           {response.table[0] && Object.keys(response.table[0]).length > 1 && (
-            <div style={{ maxWidth: 600, marginTop: 40 }}>
-              <h2>Chart:</h2>
-              <Bar data={getChartData()!} />
+            <div className="min-w-full border-collapse" style={{ maxWidth: 600, marginTop: 40 }}>
+              <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+                {CONSTANTS.CHART}
+              </h2>
+              <Bar className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                data={getChartData()!} />
             </div>
           )}
         </>
