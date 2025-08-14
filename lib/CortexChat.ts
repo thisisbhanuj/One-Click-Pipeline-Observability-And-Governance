@@ -1,7 +1,4 @@
 import axios from "axios";
-import fs from "fs";
-import jwt from "jsonwebtoken";
-import crypto from "crypto";
 
 import { generateJwt } from "@/lib/jwtGenerator";
 
@@ -27,14 +24,14 @@ export interface CortexChatResponse {
  * Service for interacting with Snowflake Cortex Chat API.
  */
 export class CortexChat {
-  private agentUrl: string;
-  private searchService: string;
-  private semanticModel: string;
-  private model: string;
-  private account: string;
-  private user: string;
-  private privateKeyPath: string;
-  private privateKeyPassphrase: string;
+  private readonly agentUrl: string;
+  private readonly searchService: string;
+  private readonly semanticModel: string;
+  private readonly model: string;
+  private readonly account: string;
+  private readonly user: string;
+  private readonly privateKeyPath: string;
+  private readonly privateKeyPassphrase: string;
   private jwtToken: string | null = null;
 
   /**

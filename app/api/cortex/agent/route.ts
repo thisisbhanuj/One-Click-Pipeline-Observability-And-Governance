@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { CortexChat } from "@/lib/CortexChat";
 import snowflake from "snowflake-sdk";
 
-/** @typedef {{ sql: string; text: string; citations: string; table?: any[] }} ParsedResponse */
+export const dynamic = "force-dynamic";
+
 type ParsedResponse = {
   sql: string;
   text: string;
@@ -65,7 +66,7 @@ CONN.connect((err, _) => {
  * @param {string} raw - The raw string response from the streaming API.
  * @returns {ParsedResponse} An object containing extracted SQL, combined text, and citations.
  */
-function parseRaw(raw: string): { sql: string; text: string; citations: string } {
+function parseRaw(raw: string): ParsedResponse {
   let sql = "";
   let text = "";
   let citations = "";
@@ -144,7 +145,7 @@ async function executeSql(sql: string): Promise<any[]> {
  * @param {NextRequest} req
  * @returns {Promise<NextResponse>}
  */
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = await req.json();
     if (!body?.prompt || typeof body.prompt !== "string") {
@@ -155,7 +156,7 @@ export async function POST(req: NextRequest) {
     const parsed = parseRaw(agentResp.raw);
     const table = await executeSql(parsed.sql);
 
-    return NextResponse.json({ ...parsed, table }, { status: 200 });
+    return NextResponse.json({ ...parsed, table: JSON.stringify(table) }, { status: 200 });
   } catch (e: any) {
     console.error("Cortex route error:", e);
     return NextResponse.json({ error: e.message ?? "Unknown error" }, { status: 500 });
