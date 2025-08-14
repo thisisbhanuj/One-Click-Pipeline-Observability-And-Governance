@@ -1,6 +1,7 @@
 # Next-Gen Data Pipeline Admin Portal with DBT, OpenMetadata & Snowflake Cortex Agent/Search: Empowering Real-Time, NLQ-Driven Insights for Business Leaders
 
-<img width="1916" height="894" alt="image" src="https://github.com/user-attachments/assets/b3d25c10-441e-41a7-bb3e-e35500d016e4" />
+
+<img width="1651" height="902" alt="image" src="https://github.com/user-attachments/assets/4dbdc62d-a000-4dcb-a284-8d92672338db" />
 
 
 ## Core Features
