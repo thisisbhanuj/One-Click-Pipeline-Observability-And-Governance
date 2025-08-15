@@ -1,6 +1,7 @@
 export const PROMPTS = { TOP_SELLING_BOOK_BRANDS_TX_2003: { description: "Show me the top selling brands in the state ‘TX’ in the ‘Books’ category in the year 2003", } };
 
 export const CONSTANTS = {
+  GIT_REPO: "https://github.com/thisisbhanuj/One-Click-Pipeline-Observability-And-Governance",
   APP_TITLE: "Unified AI Data Intelligence Platform",
   APP_DESCRIPTION: "Orchestrate ipelines, track freshness, explore lineage and run semantic or natural language queries — powered by ❄️ Snowflake AI Agents",
   TABLE_RESULT: "Table Result",

@@ -2,11 +2,15 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import { CONSTANTS } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'Data Pipeline Admin',
-  description: 'Data Pipeline Admin',
-  generator: 'BHANUJ',
+  title: CONSTANTS.APP_TITLE,
+  applicationName: CONSTANTS.APP_TITLE,
+  description: CONSTANTS.APP_DESCRIPTION,
+  authors: {url: CONSTANTS.GIT_REPO, name: 'BHANUJ'},
+  creator: 'BHANUJ',
+  publisher: 'BHANUJ'
 }
 
 export default function RootLayout({
