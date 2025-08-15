@@ -222,18 +222,18 @@ export default function AdminPortal() {
         {/* Main Content Tabs */}
         <Tabs defaultValue="cortex-agent" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="cortex-agent">{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_NAME}</TabsTrigger>
-            <TabsTrigger value="lineage">{process.env.NEXT_PUBLIC_TAB_LINEAGE_NAME}</TabsTrigger>
-            <TabsTrigger value="pipelines">{process.env.NEXT_PUBLIC_TAB_PIPELINE_HEALTH_NAME}</TabsTrigger>
-            <TabsTrigger value="freshness">{process.env.NEXT_PUBLIC_TAB_FRESHNESS_NAME}</TabsTrigger>
+            <TabsTrigger value="cortex-agent">{CONSTANTS.TAB_SNOWFLAKE_CORTEX_AGENT_NAME}</TabsTrigger>
+            <TabsTrigger value="lineage">{CONSTANTS.TAB_LINEAGE_NAME}</TabsTrigger>
+            <TabsTrigger value="pipelines">{CONSTANTS.TAB_PIPELINE_HEALTH_NAME}</TabsTrigger>
+            <TabsTrigger value="freshness">{CONSTANTS.TAB_FRESHNESS_NAME}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="cortex-agent" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_TITLE}</CardTitle>
+                <CardTitle>{CONSTANTS.TAB_SNOWFLAKE_CORTEX_AGENT_TITLE}</CardTitle>
                 <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_SNOWFLAKE_CORTEX_AGENT_DESCRIPTION}
+                  {CONSTANTS.TAB_SNOWFLAKE_CORTEX_AGENT_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -245,9 +245,9 @@ export default function AdminPortal() {
           <TabsContent value="lineage" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_SOLUTION_TITLE}</CardTitle>
+                <CardTitle>{CONSTANTS.TAB_OPENMETADATA_SOLUTION_TITLE}</CardTitle>
                 <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_SOLUTION_DESCRIPTION}
+                  {CONSTANTS.TAB_OPENMETADATA_SOLUTION_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -267,9 +267,9 @@ export default function AdminPortal() {
           <TabsContent value="pipelines" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_PIPELINE_HEALTH}</CardTitle>
+                <CardTitle>{CONSTANTS.TAB_OPENMETADATA_PIPELINE_HEALTH}</CardTitle>
                 <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_PIPELINE_HEALTH_DESCRIPTION}
+                  {CONSTANTS.TAB_OPENMETADATA_PIPELINE_HEALTH_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -326,9 +326,9 @@ export default function AdminPortal() {
           <TabsContent value="freshness" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>{process.env.NEXT_PUBLIC_TAB_OPENMETADATA_FRESHNESS}</CardTitle>
+                <CardTitle>{CONSTANTS.TAB_OPENMETADATA_FRESHNESS}</CardTitle>
                 <CardDescription>
-                  {process.env.NEXT_PUBLIC_TAB_OPENMETADATA_FRESHNESS_DESCRIPTION}
+                  {CONSTANTS.TAB_OPENMETADATA_FRESHNESS_DESCRIPTION}
                 </CardDescription>
               </CardHeader>
               <CardContent>

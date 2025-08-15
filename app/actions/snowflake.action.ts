@@ -1,31 +1,68 @@
-import { connection } from 'next/server'
+"use server"
+
 import { HttpStatusCode } from "axios";
 
-export async function continueConversationWithTool(prompt: string) {
-    await connection();
-    // Everything below will be excluded from prerendering
-    const result = await fetch("/api/cortex/agent", {
-        method: "POST",
-        body: JSON.stringify({ prompt }),
-        headers: { 
-            "Content-Type": "application/json" 
-        },
-      }
-    );
+export default async function unifiedApiCall(prompt: string) {
+  const service = process.env.OPTED_SERVICE!;
 
-    const data = await result.json();
-
-    if (!data) {
-        return {
-            data: "",
-            status: HttpStatusCode.InternalServerError,
-            success: false
-        };
-    }
-    
+  // Validate OPTED_SERVICE
+  if (!service || !["AWS", "NEXTJS"].includes(service)) {
     return {
-        data: JSON.stringify(data),
-        status: HttpStatusCode.Accepted,
-        success: true
+      data: "",
+      status: HttpStatusCode.BadRequest,
+      success: false,
+      message: "Invalid or missing OPTED_SERVICE env variable"
     };
+  }
+
+  // Pick endpoint based on service
+  let endpoint: string | undefined;
+  if (service === "AWS") {
+    endpoint = process.env.AWS_API_GATEWAY_REST_ENDPOINT;
+    if (!endpoint) {
+      return {
+        data: "",
+        status: HttpStatusCode.BadRequest,
+        success: false,
+        message: "AWS_API_GATEWAY_REST_ENDPOINT is not set."
+      };
+    }
+  } else if (service === "NEXTJS") {
+    endpoint = process.env.CORTEX_AGENT_API_PATH;
+    if (!endpoint) {
+      return {
+        data: "",
+        status: HttpStatusCode.BadRequest,
+        success: false,
+        message: "CORTEX_AGENT_API_PATH is not set."
+      };
+    }
+  }
+
+  const payload =
+    service === "AWS" ? { prompts: [prompt] } : { prompt };
+
+  const result = await fetch(endpoint!, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const output = await result.json();
+  const data = 
+    service === "AWS" ? output.results : output;
+
+  if (!data) {
+    return {
+      data: "",
+      status: HttpStatusCode.InternalServerError,
+      success: false
+    };
+  }
+
+  return {
+    data: data,
+    status: HttpStatusCode.Accepted,
+    success: true
+  };
 }

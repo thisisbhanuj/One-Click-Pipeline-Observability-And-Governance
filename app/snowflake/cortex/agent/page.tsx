@@ -13,9 +13,7 @@ import {
 } from "chart.js";
 
 import { PROMPTS, CONSTANTS } from "@/lib/constants";
-import { continueConversationWithTool } from "@/app/actions/snowflake.action";
-
-export const dynamic = "force-dynamic";
+import unifiedApiCall from "@/app/actions/snowflake.action";
 
 ChartJS.register(
   CategoryScale,
@@ -30,6 +28,7 @@ export default function CortexAgentChatBot() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [hasTried, setHasTried] = useState(false);
 
   const parsedTable = useMemo(() => {
     try {
@@ -55,11 +54,12 @@ export default function CortexAgentChatBot() {
   }, [parsedTable]);
 
   const sendPrompt = async () => {
+    setHasTried(true);
     setLoading(true);
     setResponse(null);
     try {
-      const res = await continueConversationWithTool(prompt);
-      if (res.success) setResponse(JSON.parse(res.data));
+      const res = await unifiedApiCall(prompt);
+      if (res.success) setResponse(res.data);
       else setResponse({ error: "Error" });
     } catch {
       setResponse({ error: "Network error" });
@@ -72,41 +72,37 @@ export default function CortexAgentChatBot() {
     <main className="space-y-4">
       <div>
         <textarea
-          className="w-full p-2 border border-gray-300 rounded-lg 
-            focus:outline-none focus:border-blue-500"
+          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           rows={4}
           value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
+          onChange={(e) => {
+            setPrompt(e.target.value);
+            setResponse(null);
+            setHasTried(false);
+          }}
           placeholder={PROMPTS.TOP_SELLING_BOOK_BRANDS_TX_2003.description}
         />
         <button
           className={`w-auto p-2 border rounded-lg focus:outline-none 
             ${loading || !prompt
               ? "bg-gray-600 text-gray-200 border-gray-300 cursor-not-allowed"
-              : "bg-black text-white border-gray-300 hover:bg-gray-800"}`
-          }
+              : "bg-black text-white border-gray-300 hover:bg-gray-800"}`}
           onClick={sendPrompt}
-          disabled={loading || !prompt}
+          disabled={loading}
         >
           {loading ? "❄️ Snowflake Cortex Agent fetching data..." : "Send"}
         </button>
       </div>
 
-      {response?.error && <pre>{response.error}</pre>}
+      {hasTried && response?.error && <pre>{response.error}</pre>}
 
       <div className="bg-white p-4 rounded-xl shadow-sm space-y-6">
         {response?.sql && parsedTable.length > 0 && (
           <>
-            <h2 className="text-lg font-semibold 
-              text-gray-800 border-b border-gray-200 pb-2 mb-4"
-            >
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
               {CONSTANTS.TABLE_RESULT}
             </h2>
-            <table 
-              className="min-w-full border-collapse"
-              border={1} 
-              style={{ marginTop: 20 }}
-            >
+            <table className="min-w-full border-collapse" border={1} style={{ marginTop: 20 }}>
               <thead className="bg-gray-100">
                 <tr>
                   {Object.keys(parsedTable[0]).map((col) => (
@@ -115,31 +111,19 @@ export default function CortexAgentChatBot() {
                 </tr>
               </thead>
               <tbody>
-                {parsedTable.map(
-                  (row: { [s: string]: unknown; } | ArrayLike<unknown>, idx: string) => (
-                    <tr key={'row_' + idx}>
-                      {
-                        Object.values(row).map((val, i) => (
-                          <td key={'cell_' + i}>{String(val)}</td>
-                        ))
-                      }
-                    </tr>
+                {parsedTable.map((row: { [s: string]: unknown; } | ArrayLike<unknown>, idx: string) => (
+                  <tr key={'row_' + idx}>
+                    {Object.values(row).map((val, i) => (
+                      <td key={'cell_' + i}>{String(val)}</td>
+                    ))}
+                  </tr>
                 ))}
               </tbody>
             </table>
 
             {chartData && (
-              <div className="min-w-full border-collapse" 
-                style={
-                  { 
-                    maxWidth: 600, 
-                    marginTop: 40
-                  }
-                }
-              >
-                <h2 className="text-lg font-semibold 
-                  text-gray-800 border-b border-gray-200 pb-2 mb-4"
-                >
+              <div className="min-w-full border-collapse" style={{ maxWidth: 600, marginTop: 40 }}>
+                <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
                   {CONSTANTS.CHART}
                 </h2>
                 <Bar data={chartData} />

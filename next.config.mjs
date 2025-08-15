@@ -2,15 +2,7 @@
 const nextConfig = {
   generateEtags: true,
   reactStrictMode: true,
-  productionBrowserSourceMaps: false,
   poweredByHeader: false,
-  experimental: {
-    serverMinification: true,
-    serverSourceMaps: false,
-    webpackBuildWorker: true,
-    workerThreads: true,
-    parallelServerCompiles: true,
-  },
   logging: {
     fetches: {
       fullUrl: true,
