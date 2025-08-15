@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CortexChat } from "@/lib/CortexChat";
 import snowflake from "snowflake-sdk";
-
-export const dynamic = "force-dynamic";
+import { getPrivateKey } from "@/lib/AWSUtils";
 
 type ParsedResponse = {
   sql: string;
@@ -11,7 +10,9 @@ type ParsedResponse = {
   table?: any[];
 };
 
-/** Environment variables */
+const { rsaKeyPath, rsaKeyContent } = await getPrivateKey() ?? {};
+
+/** Environment Variables */
 const ACCOUNT = process.env.ACCOUNT!;
 const DATABASE = process.env.DATABASE!;
 const SEMANTIC_VIEW_SCHEMA = process.env.SEMANTIC_VIEW_SCHEMA!;
@@ -20,7 +21,8 @@ const PASSWORD = process.env.USER_PASSWORD!
 const WAREHOUSE = process.env.WAREHOUSE!;
 const ROLE = process.env.USER_ROLE!;
 const HOST = process.env.HOST!;
-const RSA_PRIVATE_KEY_PATH = process.env.RSA_PRIVATE_KEY_PATH!;
+const RSA_PRIVATE_KEY = rsaKeyContent!;
+const RSA_PRIVATE_KEY_PATH = rsaKeyPath!;
 const RSA_PRIVATE_KEY_PASSPHRASE = process.env.RSA_PRIVATE_KEY_PASSPHRASE!;
 const AGENT_ENDPOINT = process.env.AGENT_ENDPOINT!;
 const SEARCH_SERVICE = process.env.SEARCH_SERVICE!;
@@ -51,6 +53,7 @@ const CONN = snowflake.createConnection({
   host: HOST,
   authenticator: "SNOWFLAKE_JWT",
   privateKeyPath: RSA_PRIVATE_KEY_PATH,
+  // privateKey: RSA_PRIVATE_KEY,
   privateKeyPass: RSA_PRIVATE_KEY_PASSPHRASE,
   streamResult:false
 });
